@@ -9,4 +9,5 @@ public interface ItemService {
     void updateItem(ItemDTO itemDTO);
     void deleteItem(String code);
     List<ItemDTO> getAllItems();
+    List<String> getItemCodes();
 }

@@ -1,67 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Item Management</title>-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--</head>-->
-
-<!--<body class="container mt-4">-->
-<!--<h2 class="mb-3">Manage Items</h2>-->
-
-<!--<div class="card p-3 mb-4">-->
-<!--    <form id="itemForm">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="code" class="form-label">Code</label>-->
-<!--                <input type="text" id="code" class="form-control" required>-->
-<!--            </div>-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="name" class="form-label">Name</label>-->
-<!--                <input type="text" id="name" class="form-control" required>-->
-<!--            </div>-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="description" class="form-label">Description</label>-->
-<!--                <input type="text" id="description" class="form-control">-->
-<!--            </div>-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="image" class="form-label">Image</label>-->
-<!--                <input type="file" id="image" class="form-control" accept="image/*" onchange="previewImage(event)">-->
-<!--                <img id="imagePreview" src="#" alt="Image preview" style="max-width: 100px; margin-top: 10px;">-->
-<!--            </div>-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="quantity" class="form-label">Quantity</label>-->
-<!--                <input type="number" id="quantity" class="form-control" required>-->
-<!--            </div>-->
-<!--            <div class="col-md-6 mb-2">-->
-<!--                <label for="price" class="form-label">Price</label>-->
-<!--                <input type="number" id="price" class="form-control" step="0.01" required>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <button type="button" class="btn btn-success mt-2" onclick="saveItem()">Save</button>-->
-<!--        <button type="button" class="btn btn-primary mt-2" onclick="updateItem()">Update</button>-->
-<!--        <button type="button" class="btn btn-danger mt-2" onclick="deleteItem()">Delete</button>-->
-<!--        <button type="button" class="btn btn-warning mt-2" onclick="clearForm()">Clear</button>-->
-<!--        <button type="button" class="btn btn-secondary mt-2" onclick="goBack()">Back</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-<!--<h3>Saved Items</h3>-->
-<!--<table class="table table-bordered">-->
-<!--    <thead class="table-dark">-->
-<!--    <tr>-->
-<!--        <th>Code</th>-->
-<!--        <th>Name</th>-->
-<!--        <th>Description</th>-->
-<!--        <th>Image</th>-->
-<!--        <th>Quantity</th>-->
-<!--        <th>Price</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody id="itemTableBody"></tbody>-->
-<!--</table>-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -145,6 +81,7 @@
         let description = $('#description').val().trim();
         let quantity = $('#quantity').val().trim();
         let price = $('#price').val().trim();
+        let date = $('#date').val().trim();
         let image = $('#image').val().trim();
 
         if (!code || !name || !quantity || !price) {
@@ -152,7 +89,7 @@
             return;
         }
 
-        let item = { code, name, description, quantity, price, image };
+        let item = { code, name, description, quantity, price, date, image };
 
         $.ajax({
             url: "http://localhost:8080/api/v1/item/save",

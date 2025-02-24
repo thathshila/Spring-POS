@@ -38,4 +38,11 @@ public class CustomerController {
                 "Customer List",
                 customerService.getAllCustomers());
     }
+    @GetMapping("getCustomerPhone")
+    public ResponseUtil getCustomersPhone() {
+        return new ResponseUtil(
+                200,
+                "Customer Phone List",
+                customerService.getCustomersPhone());
+    }
 }

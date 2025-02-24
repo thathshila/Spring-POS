@@ -34,4 +34,8 @@ public class ItemController {
     public ResponseUtil getAllItems() {
         return new ResponseUtil(200,"Get All Items",itemService.getAllItems());
     }
+    @GetMapping("getItemCodes")
+    public ResponseUtil getItemCodes() {
+        return new ResponseUtil(200,"Get All Item Codes",itemService.getItemCodes());
+    }
 }
