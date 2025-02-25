@@ -1,4 +1,7 @@
 package lk.ijse.spring_pos.repo;
 
-public interface OrderDetailRepo {
+import lk.ijse.spring_pos.entity.OrderDetail;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderDetailRepo extends JpaRepository<OrderDetail, Integer> {
 }

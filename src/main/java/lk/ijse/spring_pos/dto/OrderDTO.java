@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +17,5 @@ public class OrderDTO {
     private double totalPrice;
     private Date date;
     private Customer customer;
+    private List<OrderDetailDTO> orderDetails;
 }

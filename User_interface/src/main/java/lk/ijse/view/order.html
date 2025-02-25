@@ -212,6 +212,128 @@
         }
     });
 
+    let cart = [];
+
+    $("#quantity").on("input", function () {
+        let qty = parseInt($(this).val()) || 0;
+        let price = parseFloat($("#unitPrice").val()) || 0;
+        $("#total").val(qty * price);
+    });
+
+    $("#addToCart").click(function () {
+        let itemCode = $("#itemCode").val();
+        let itemName = $("#itemName").val();
+        let availableQty = parseInt($("#availableQty").val()) || 0;
+        let quantity = parseInt($("#quantity").val()) || 0;
+        let unitPrice = parseFloat($("#unitPrice").val()) || 0;
+        let total = quantity * unitPrice;
+
+        if (!itemCode || !quantity || quantity > availableQty) {
+            alert("Invalid quantity or item selection!");
+            return;
+        }
+
+        let existingItem = cart.find(item => item.itemCode === itemCode);
+        if (existingItem) {
+            existingItem.quantity += quantity;
+            existingItem.total += total;
+        } else {
+            cart.push({ itemCode, itemName, quantity, unitPrice, total });
+        }
+
+        updateCartTable();
+        $("#quantity").val("");
+        $("#total").val("");
+    });
+
+    function updateCartTable() {
+        let tbody = $("#cartTableBody");
+        tbody.empty();
+
+        cart.forEach((item, index) => {
+            tbody.append(`
+            <tr>
+                <td>${item.itemCode}</td>
+                <td>${item.itemName}</td>
+                <td>${item.quantity}</td>
+                <td>${item.total.toFixed(2)}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="removeCartItem(${index})">Remove</button></td>
+            </tr>
+        `);
+        });
+    }
+
+    function removeCartItem(index) {
+        cart.splice(index, 1);
+        updateCartTable();
+    }
+
+    // $("#placeOrder").click(function () {
+    //     if (cart.length === 0) {
+    //         alert("Cart is empty!");
+    //         return;
+    //     }
+    //
+    //     let orderData = {
+    //         orderId: $("#orderId").val(),
+    //         orderDate: $("#orderDate").val(),
+    //         phone: $("#phone").val(),
+    //         items: cart
+    //     };
+    //
+    //     $.ajax({
+    //         url: "http://localhost:8080/api/v1/order/save",
+    //         method: "POST",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(orderData),
+    //         success: function (resp) {
+    //             alert("Order placed successfully!");
+    //             cart = [];
+    //             updateCartTable();
+    //             $("#orderForm")[0].reset();
+    //         },
+    //         error: function (error) {
+    //             console.error("Error placing order:", error);
+    //             alert("Failed to place order!");
+    //         }
+    //     });
+    // });
+
+    $("#placeOrder").click(function () {
+        if (cart.length === 0) {
+            alert("Cart is empty!");
+            return;
+        }
+
+        let orderData = {
+            orderId: $("#orderId").val(),
+            orderDate: $("#orderDate").val(),
+            phone: $("#phone").val(),
+            items: cart
+        };
+
+        console.log("Order Data before sending:", orderData); // Debugging
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/order/save",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(orderData),
+            success: function (resp) {
+                console.log("Server Response:", resp); // Debugging
+                alert("Order placed successfully!");
+                cart = [];
+                updateCartTable();
+                $("#orderForm")[0].reset();
+            },
+            error: function (error) {
+                console.error("Error placing order:", error);
+                alert("Failed to place order!");
+            }
+        });
+    });
+
+
 </script>
 </body>
 </html>

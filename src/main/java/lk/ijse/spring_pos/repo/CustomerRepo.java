@@ -13,7 +13,7 @@ public interface CustomerRepo extends JpaRepository<Customer, String> {
     @Query("SELECT c.phone From Customer c")
     List<String> getCustomersPhone();
 
-    @Query("SELECT c.name FROM Customer c WHERE c.phone = :phone")
+    @Query("SELECT c.id FROM Customer c WHERE c.phone = :phone")
     String findNameByPhone(@Param("phone") String phone);
 
 
