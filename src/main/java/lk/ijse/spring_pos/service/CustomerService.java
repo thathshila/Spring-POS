@@ -10,4 +10,5 @@ public interface CustomerService {
     void deleteCustomer(String id);
     List<CustomerDTO> getAllCustomers();
     List<String> getCustomersPhone();
+    String getCustomerNameByPhone(String phone);
 }

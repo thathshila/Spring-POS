@@ -45,4 +45,9 @@ public class CustomerController {
                 "Customer Phone List",
                 customerService.getCustomersPhone());
     }
+    @GetMapping("getCustomerByPhone/{phone}")
+    public ResponseUtil getCustomerByPhone(@PathVariable String phone) {
+        String customerName = customerService.getCustomerNameByPhone(phone);
+            return new ResponseUtil(200, "Customer found", customerName);
+    }
 }

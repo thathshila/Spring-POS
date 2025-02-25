@@ -50,4 +50,11 @@ public class CustomerServiceImpl implements CustomerService {
     public List<String> getCustomersPhone() {
         return customerRepo.getCustomersPhone();
     }
+
+    @Override
+    public String getCustomerNameByPhone(String phone) {
+        return customerRepo.findNameByPhone(phone);
+    }
+
+
 }

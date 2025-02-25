@@ -51,4 +51,9 @@ public class ItemServiceImpl implements ItemService {
     public List<String> getItemCodes() {
         return itemRepo.findAllItemCodes();
     }
+
+    @Override
+    public ItemDTO getItemByCode(String code) {
+        return itemRepo.findItemByCode(code);
+    }
 }

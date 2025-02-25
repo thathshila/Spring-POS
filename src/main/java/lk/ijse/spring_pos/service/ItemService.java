@@ -10,4 +10,5 @@ public interface ItemService {
     void deleteItem(String code);
     List<ItemDTO> getAllItems();
     List<String> getItemCodes();
+    ItemDTO getItemByCode(String code);
 }

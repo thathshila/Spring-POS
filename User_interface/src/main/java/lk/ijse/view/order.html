@@ -44,8 +44,10 @@
                 <input type="text" id="unitPrice" class="form-control" disabled>
             </div>
             <div class="col-md-4">
-                <label for="customerPhone" class="form-label">Choose Customer Phone</label>
-                <input type="text" id="customerPhone" class="form-control">
+                <label for="phone" class="form-label">Choose Customer Phone</label>
+                <select id="phone" class="form-select">
+                    <option value="">Select Phone</option>
+                </select>
             </div>
             <div class="col-md-4">
                 <label for="customerName" class="form-label">Customer Name</label>
@@ -85,7 +87,131 @@
         </tbody>
     </table>
 </div>
-
+<script src="../js/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    loadItemCodes();
+    loadCustomerPhones();
+
+    function loadItemCodes() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/item/getItemCodes",
+            method: "GET",
+            dataType: "json",
+            success: (resp) => {
+                console.log("API Response:", resp); // Debugging
+
+                // Check if `resp.data` is an array
+                if (!Array.isArray(resp.data)) {
+                    console.error("Error: Response data is not an array", resp);
+                    return;
+                }
+
+                let itemDropdown = $("#itemCode");
+                itemDropdown.empty().append('<option value="">Select Item</option>');
+
+                // Loop through `resp.data`
+                resp.data.forEach(code => {
+                    itemDropdown.append(`<option value="${code}">${code}</option>`);
+                });
+            },
+            error: (err) => {
+                console.error("Error loading item codes:", err);
+            }
+        });
+    }
+
+    function loadCustomerPhones() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/customer/getCustomerPhone",
+            method: "GET",
+            dataType: "json",
+            success: function (resp) {
+                console.log("API Response:", resp); // Debugging output
+
+                // Ensure `resp.data` exists and is an array
+                if (!resp.data || !Array.isArray(resp.data)) {
+                    console.error("Error: Response data is not an array", resp);
+                    return;
+                }
+
+                let phoneSelect = document.getElementById("phone");
+                phoneSelect.innerHTML = '<option value="">Select Phone</option>'; // Clear previous options
+
+                // Iterate over resp.data instead of resp
+                resp.data.forEach(phone => {
+                    let option = document.createElement("option");
+                    option.value = phone;
+                    option.textContent = phone;
+                    phoneSelect.appendChild(option);
+                });
+            },
+            error: function (error) {
+                console.error("Error loading customer phones:", error);
+            }
+        });
+    }
+
+    $("#phone").change(function () {
+        let selectedPhone = $(this).val();
+        if (selectedPhone) {
+            $.ajax({
+                url: `http://localhost:8080/api/v1/customer/getCustomerByPhone/${selectedPhone}`,
+                method: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    console.log("Customer Data Response:", resp); // Debugging output
+
+                    if (resp && resp.data) {
+                        console.log("Customer Name:", resp.data); // This should log the customer name
+                        $("#customerName").val(resp.data);  // Set the customer name directly
+                    } else {
+                        $("#customerName").val("");  // Clear input if no name found
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching customer details:", error);
+                }
+            });
+        } else {
+            console.log("No phone selected.");
+            $("#customerName").val("");  // Clear input if no phone selected
+        }
+    });
+
+    $("#itemCode").change(function () {
+        let selectedCode = $(this).val();
+        if (selectedCode) {
+            $.ajax({
+                url: `http://localhost:8080/api/v1/item/getItemByCode/${selectedCode}`, // API to get item details by code
+                method: "GET",
+                dataType: "json",
+                success: function (resp) {
+                    console.log("Item Data Response:", resp); // Debugging output
+                    if (resp && resp.data) {
+                        // Assuming the response contains item details like name, quantity, and price
+                        $("#itemName").val(resp.data.name); // Fill in item name
+                        $("#availableQty").val(resp.data.quantity); // Fill in available quantity
+                        $("#unitPrice").val(resp.data.price); // Fill in unit price
+                    } else {
+                        // Clear fields if no item found
+                        $("#itemName").val("");
+                        $("#availableQty").val("");
+                        $("#unitPrice").val("");
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching item details:", error);
+                }
+            });
+        } else {
+            // Clear fields if no item code selected
+            $("#itemName").val("");
+            $("#availableQty").val("");
+            $("#unitPrice").val("");
+        }
+    });
+
+</script>
 </body>
 </html>

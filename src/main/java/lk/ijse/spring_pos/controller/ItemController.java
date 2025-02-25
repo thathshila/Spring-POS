@@ -38,4 +38,11 @@ public class ItemController {
     public ResponseUtil getItemCodes() {
         return new ResponseUtil(200,"Get All Item Codes",itemService.getItemCodes());
     }
+    @GetMapping("getItemByCode/{code}")
+    public ResponseUtil getItemByCode(@PathVariable String code) {
+        ItemDTO item = itemService.getItemByCode(code);
+        return new ResponseUtil(200, "Item found", item);
+    }
+
+
 }
