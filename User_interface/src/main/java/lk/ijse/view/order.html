@@ -69,6 +69,7 @@
         <button type="button" class="btn btn-success" id="addToCart">Add to Cart</button>
         <button type="reset" class="btn btn-warning">Clear</button>
         <button type="button" class="btn btn-primary" id="placeOrder">Place Order</button>
+        <button type="button" class="btn btn-dark w-20" onclick="goBack()">Back</button>
     </form>
 
     <h3 class="mt-5">Cart</h3>
@@ -283,7 +284,6 @@
         updateTotalPrice();
     }
 
-
     $('#placeOrder').click(function () {
         const orderId = $('#orderId').val();
         const orderDate = $('#orderDate').val();
@@ -333,6 +333,10 @@
             }
         });
     });
+
+    function goBack() {
+        window.location.href = '../index.html';
+    }
 
 </script>
 </body>

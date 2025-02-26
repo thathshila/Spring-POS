@@ -19,4 +19,9 @@ public class  PlaceOrderController {
         placeOrderService.addOrder(orderDTO);
         return new ResponseUtil(201,"Order Saved",null);
     }
+
+    @GetMapping("getAll")
+    public ResponseUtil getAllOrders() {
+        return new ResponseUtil(200,"All Orders",placeOrderService.getOrderDetails());
+    }
 }

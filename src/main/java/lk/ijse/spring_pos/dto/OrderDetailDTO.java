@@ -11,4 +11,6 @@ public class OrderDetailDTO {
     private String itemCode;
     private int quantity;
     private double total;
+    private String id;
+    private String orderId;
 }
