@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Table(name = "orders")
-public class Order {
+public class Orders {
     @Id
     private String orderId;
     private double totalPrice;

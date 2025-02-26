@@ -223,7 +223,7 @@
     $("#addToCart").click(function () {
         let itemCode = $("#itemCode").val();
         let itemName = $("#itemName").val();
-        let availableQty = parseInt($("#availableQty").val()) || 0;
+      //  let availableQty = parseInt($("#availableQty").val()) || 0;
         let quantity = parseInt($("#quantity").val()) || 0;
         let unitPrice = parseFloat($("#unitPrice").val()) || 0;
         let total = quantity * unitPrice;
@@ -299,39 +299,56 @@
     //     });
     // });
 
-    $("#placeOrder").click(function () {
-        if (cart.length === 0) {
-            alert("Cart is empty!");
-            return;
-        }
+    $('#placeOrder').click(function () {
+        const orderId = $('#orderId').val();
+        const orderDate = $('#orderDate').val();
+        const customerId = $('#customerName').val();
+        const itemId = $('#itemCode').val();
+        const itemPrice = parseFloat($('#unitPrice').val());
+        const orderQuantity = parseInt($('#quantity').val());
+        const total = orderQuantity * itemPrice;
 
-        let orderData = {
-            orderId: $("#orderId").val(),
-            orderDate: $("#orderDate").val(),
-            phone: $("#phone").val(),
-            items: cart
+        const orderData = {
+            orderId:orderId,
+            totalPrice: total,
+            date: orderDate,
+            customerId: customerId,
+            orderDetails: [
+                {
+                    itemCode: itemId, // Make sure this is a string if your DB uses VARCHAR for item ID
+                    quantity: orderQuantity,
+                    total: itemPrice
+                }
+            ]
         };
 
-        console.log("Order Data before sending:", orderData); // Debugging
+        console.log("Sending data:", JSON.stringify(orderData)); // Debugging
 
         $.ajax({
             url: "http://localhost:8080/api/v1/order/save",
             method: "POST",
             contentType: "application/json",
+            dataType: "json",
             data: JSON.stringify(orderData),
+
             success: function (resp) {
-                console.log("Server Response:", resp); // Debugging
-                alert("Order placed successfully!");
-                cart = [];
-                updateCartTable();
-                $("#orderForm")[0].reset();
+                alert(resp.msg);  // Show success message
+                console.log("Success:", resp);
             },
-            error: function (error) {
-                console.error("Error placing order:", error);
-                alert("Failed to place order!");
+
+            error: function (xhr) {
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    alert("Error: " + response.message); // Show error message from backend
+                    console.log("Error:", response);
+                } catch (e) {
+                    alert("Unexpected error occurred!");
+                    console.log("Parsing error:", e);
+                }
             }
         });
     });
+
 
 
 </script>
