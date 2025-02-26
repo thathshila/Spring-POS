@@ -212,6 +212,78 @@
         }
     });
 
+    // Declare an empty cart array
+    let cart = [];
+
+    $("#addToCart").click(function () {
+        const itemCode = $("#itemCode").val();
+        const itemName = $("#itemName").val();
+        const availableQty = parseInt($("#availableQty").val());
+        const unitPrice = parseFloat($("#unitPrice").val());
+        const quantity = parseInt($("#quantity").val());
+
+        if (!itemCode || !itemName || !unitPrice || !quantity) {
+            alert("Please fill in all the fields before adding to the cart.");
+            return;
+        }
+
+        if (quantity > availableQty) {
+            alert("Quantity exceeds available stock.");
+            return;
+        }
+
+        // Calculate the total price for this item
+        const itemTotal = unitPrice * quantity;
+
+        // Add item to cart
+        cart.push({
+            itemCode,
+            itemName,
+            quantity,
+            unitPrice,
+            total: itemTotal
+        });
+
+        // Update the cart table
+        updateCartTable();
+
+        // Update the total price
+        updateTotalPrice();
+    });
+
+    function updateCartTable() {
+        const cartTableBody = $("#cartTableBody");
+        cartTableBody.empty();
+
+        // Loop through the cart and display the items in the table
+        cart.forEach((item, index) => {
+            cartTableBody.append(`
+            <tr>
+                <td>${item.itemCode}</td>
+                <td>${item.itemName}</td>
+                <td>${item.quantity}</td>
+                <td>${item.total.toFixed(2)}</td>
+                <td><button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button></td>
+            </tr>
+        `);
+        });
+    }
+
+    function updateTotalPrice() {
+        const totalPrice = cart.reduce((sum, item) => sum + item.total, 0);
+        $("#total").val(totalPrice.toFixed(2));
+    }
+
+    function removeFromCart(index) {
+        // Remove item from the cart
+        cart.splice(index, 1);
+
+        // Update the cart table and total
+        updateCartTable();
+        updateTotalPrice();
+    }
+
+
     $('#placeOrder').click(function () {
         const orderId = $('#orderId').val();
         const orderDate = $('#orderDate').val();
@@ -261,8 +333,6 @@
             }
         });
     });
-
-
 
 </script>
 </body>
