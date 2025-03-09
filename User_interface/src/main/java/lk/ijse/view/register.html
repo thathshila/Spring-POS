@@ -71,22 +71,20 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/api/v1/user/register",  // Backend API
+                url: "http://localhost:8080/api/v1/user/register",
                 contentType: "application/json",
                 data: JSON.stringify(userData),
-                success: function (data) {  // Use 'data' instead of 'response'
+                success: function (data) {
                     alert("Registration Successful!");
 
-                    // Extract token from 'data' and store it in localStorage
                     if (data.token) {
-                        localStorage.setItem("authToken", data.token); // Store token in localStorage
+                        localStorage.setItem("authToken", data.token);
                     }
 
-                    // Redirect based on role
                     if (userData.role === "ADMIN") {
-                        window.location.href = "dashboard.html";  // Admin Dashboard
+                        window.location.href = "dashboard.html";
                     } else {
-                        window.location.href = "dashboard.html";  // User Dashboard
+                        window.location.href = "dashboard.html";
                     }
                 },
                 error: function (xhr) {

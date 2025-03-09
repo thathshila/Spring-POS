@@ -31,6 +31,7 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return new ResponseUtil(200,"Customer Deleted",null);
     }
+
     @GetMapping("getAll")
     public ResponseUtil getAllCustomers() {
         return new ResponseUtil(

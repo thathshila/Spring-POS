@@ -68,32 +68,183 @@
 <script src="../js/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!--<script>-->
+<!--    let authToken = localStorage.getItem("authToken");-->
+<!--    console.log(authToken)-->
+
+<!--    $(document).ready(function() {-->
+<!--        getAll();-->
+<!--    });-->
+
+<!--    const getAll = () => {-->
+<!--        let tableBody = $('#customerTableBody');-->
+<!--        $.ajax({-->
+<!--            url: "http://localhost:8080/api/v1/customer/getAll",-->
+<!--            method: "GET",-->
+<!--            dataType: "json",-->
+<!--            headers:{"Authorization": `Bearer ${authToken}`},-->
+<!--            success: (resp) => {-->
+<!--                console.log("API Response:", resp);-->
+
+<!--                tableBody.empty();-->
+
+<!--                let customers = Array.isArray(resp) ? resp : resp.data;-->
+<!--                if (!Array.isArray(customers)) {-->
+<!--                    console.error("Invalid response format", resp);-->
+<!--                    alert("Unexpected data format received from the server!");-->
+<!--                    return;-->
+<!--                }-->
+
+<!--                customers.forEach(item => {-->
+<!--                    tableBody.append(`-->
+<!--                        <tr>-->
+<!--                            <td>${item.id}</td>-->
+<!--                            <td>${item.name}</td>-->
+<!--                            <td>${item.address}</td>-->
+<!--                            <td>${item.phone}</td>-->
+<!--                            <td>${item.email}</td>-->
+<!--                            <td>${item.date}</td>-->
+<!--                        </tr>-->
+<!--                    `);-->
+<!--                });-->
+<!--            },-->
+<!--            error: (xhr, status, error) => {-->
+<!--                console.error("Error fetching customers:", status, error, xhr.responseText);-->
+<!--                alert("Error loading customer data!");-->
+<!--            }-->
+<!--        });-->
+<!--    };-->
+
+<!--    function saveCustomer() {-->
+<!--        let id = $('#customerId').val().trim();-->
+<!--        let name = $('#name').val().trim();-->
+<!--        let address = $('#address').val().trim();-->
+<!--        let email = $('#email').val().trim();-->
+<!--        let phone = $('#phone').val().trim();-->
+<!--        let date = $('#date').val().trim();-->
+
+<!--        if (!id || !name || !address || !email || !phone || !date) {-->
+<!--            alert("All fields are required!");-->
+<!--            return;-->
+<!--        }-->
+
+<!--        let customer = { id, name, address, email, phone, date };-->
+
+<!--        $.ajax({-->
+<!--            url: "http://localhost:8080/api/v1/customer/save",-->
+<!--            method: "POST",-->
+<!--            contentType: "application/json",-->
+<!--            data: JSON.stringify(customer),-->
+<!--            success: function () {-->
+<!--                alert("Customer Saved Successfully!");-->
+<!--                getAll();-->
+<!--            },-->
+<!--            error: function (xhr, status, error) {-->
+<!--                console.error("Save error:", status, error, xhr.responseText);-->
+<!--                alert("Error saving customer!");-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    function updateCustomer() {-->
+<!--        let id = $('#customerId').val().trim();-->
+<!--        let name = $('#name').val().trim();-->
+<!--        let address = $('#address').val().trim();-->
+<!--        let email = $('#email').val().trim();-->
+<!--        let phone = $('#phone').val().trim();-->
+<!--        let date = $('#date').val().trim();-->
+
+<!--        if (!id) {-->
+<!--            alert("Customer ID is required to update!");-->
+<!--            return;-->
+<!--        }-->
+
+<!--        let customer = { id, name, address, email, phone, date };-->
+
+<!--        $.ajax({-->
+<!--            url: `http://localhost:8080/api/v1/customer/update`,-->
+<!--            method: "PUT",-->
+<!--            contentType: "application/json",-->
+<!--            data: JSON.stringify(customer),-->
+<!--            success: function () {-->
+<!--                alert("Customer Updated Successfully!");-->
+<!--                getAll();-->
+<!--            },-->
+<!--            error: function (xhr, status, error) {-->
+<!--                console.error("Update error:", status, error, xhr.responseText);-->
+<!--                alert("Error updating customer!");-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    function deleteCustomer() {-->
+<!--        let id = $('#customerId').val().trim();-->
+
+<!--        if (!id) {-->
+<!--            alert("Customer ID is required to delete!");-->
+<!--            return;-->
+<!--        }-->
+
+<!--        $.ajax({-->
+<!--            url: `http://localhost:8080/api/v1/customer/delete/${id}`,-->
+<!--            method: "DELETE",-->
+<!--            success: function () {-->
+<!--                alert("Customer Deleted Successfully!");-->
+<!--                getAll();-->
+<!--                clearFields();-->
+<!--            },-->
+<!--            error: function (xhr, status, error) {-->
+<!--                console.error("Delete error:", status, error, xhr.responseText);-->
+<!--                alert("Error deleting customer!");-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    function clearFields() {-->
+<!--        $('#customerId, #name, #address, #phone, #email, #date').val('');-->
+<!--    }-->
+
+<!--    function goBack() {-->
+<!--        window.location.href = '../index.html';-->
+<!--    }-->
+
+<!--    $(document).ready(function () {-->
+<!--        $('#customerTableBody').on('click', 'tr', function () {-->
+<!--            let row = $(this).find('td');-->
+<!--            $('#customerId').val(row.eq(0).text());-->
+<!--            $('#name').val(row.eq(1).text());-->
+<!--            $('#address').val(row.eq(2).text());-->
+<!--            $('#phone').val(row.eq(3).text());-->
+<!--            $('#email').val(row.eq(4).text());-->
+<!--            $('#date').val(row.eq(5).text());-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 <script>
-    $(document).ready(function() {
-        getAll();
+    // Retrieve token from local storage
+   let authToken =localStorage.getItem("authToken");
+    if (!authToken) {
+        alert("Unauthorized access! Please login.");
+        window.location.href = "../index.html";
+    }
+
+    $(document).ready(function () {
+        getAllCustomers();
     });
 
-    const getAll = () => {
+    function getAllCustomers() {
         let tableBody = $('#customerTableBody');
         $.ajax({
             url: "http://localhost:8080/api/v1/customer/getAll",
             method: "GET",
+            headers: { "Authorization": `Bearer ${authToken}` },
             dataType: "json",
             success: (resp) => {
-                console.log("API Response:", resp);
-
                 tableBody.empty();
-
                 let customers = Array.isArray(resp) ? resp : resp.data;
-                if (!Array.isArray(customers)) {
-                    console.error("Invalid response format", resp);
-                    alert("Unexpected data format received from the server!");
-                    return;
-                }
-
                 customers.forEach(item => {
                     tableBody.append(`
-                        <tr>
+                        <tr onclick="fillForm('${item.id}', '${item.name}', '${item.address}', '${item.phone}', '${item.email}', '${item.date}')">
                             <td>${item.id}</td>
                             <td>${item.name}</td>
                             <td>${item.address}</td>
@@ -105,38 +256,44 @@
                 });
             },
             error: (xhr, status, error) => {
-                console.error("Error fetching customers:", status, error, xhr.responseText);
+                console.error("Error fetching customers:", xhr.responseText);
                 alert("Error loading customer data!");
             }
         });
-    };
+    }
+
+    function fillForm(id, name, address, phone, email, date) {
+        $('#customerId').val(id);
+        $('#name').val(name);
+        $('#address').val(address);
+        $('#phone').val(phone);
+        $('#email').val(email);
+        $('#date').val(date);
+    }
 
     function saveCustomer() {
-        let id = $('#customerId').val().trim();
-        let name = $('#name').val().trim();
-        let address = $('#address').val().trim();
-        let email = $('#email').val().trim();
-        let phone = $('#phone').val().trim();
-        let date = $('#date').val().trim();
-
-        if (!id || !name || !address || !email || !phone || !date) {
-            alert("All fields are required!");
-            return;
-        }
-
-        let customer = { id, name, address, email, phone, date };
+        let customer = {
+            id: $('#customerId').val().trim(),
+            name: $('#name').val().trim(),
+            address: $('#address').val().trim(),
+            phone: $('#phone').val().trim(),
+            email: $('#email').val().trim(),
+            date: $('#date').val().trim()
+        };
 
         $.ajax({
             url: "http://localhost:8080/api/v1/customer/save",
             method: "POST",
+            headers: { "Authorization": `Bearer ${authToken}` },
             contentType: "application/json",
             data: JSON.stringify(customer),
             success: function () {
                 alert("Customer Saved Successfully!");
-                getAll();
+                getAllCustomers();
+                clearFields();
             },
             error: function (xhr, status, error) {
-                console.error("Save error:", status, error, xhr.responseText);
+                console.error("Save error:", xhr.responseText);
                 alert("Error saving customer!");
             }
         });
@@ -144,30 +301,33 @@
 
     function updateCustomer() {
         let id = $('#customerId').val().trim();
-        let name = $('#name').val().trim();
-        let address = $('#address').val().trim();
-        let email = $('#email').val().trim();
-        let phone = $('#phone').val().trim();
-        let date = $('#date').val().trim();
-
         if (!id) {
             alert("Customer ID is required to update!");
             return;
         }
 
-        let customer = { id, name, address, email, phone, date };
+        let customer = {
+            id,
+            name: $('#name').val().trim(),
+            address: $('#address').val().trim(),
+            phone: $('#phone').val().trim(),
+            email: $('#email').val().trim(),
+            date: $('#date').val().trim()
+        };
 
         $.ajax({
-            url: `http://localhost:8080/api/v1/customer/update`,
+            url: "http://localhost:8080/api/v1/customer/update",
             method: "PUT",
+            headers: { "Authorization": `Bearer ${authToken}` },
             contentType: "application/json",
             data: JSON.stringify(customer),
             success: function () {
                 alert("Customer Updated Successfully!");
-                getAll();
+                getAllCustomers();
+                clearFields();
             },
             error: function (xhr, status, error) {
-                console.error("Update error:", status, error, xhr.responseText);
+                console.error("Update error:", xhr.responseText);
                 alert("Error updating customer!");
             }
         });
@@ -175,7 +335,6 @@
 
     function deleteCustomer() {
         let id = $('#customerId').val().trim();
-
         if (!id) {
             alert("Customer ID is required to delete!");
             return;
@@ -184,13 +343,14 @@
         $.ajax({
             url: `http://localhost:8080/api/v1/customer/delete/${id}`,
             method: "DELETE",
+            headers: { "Authorization": `Bearer ${authToken}` },
             success: function () {
                 alert("Customer Deleted Successfully!");
-                getAll();
+                getAllCustomers();
                 clearFields();
             },
             error: function (xhr, status, error) {
-                console.error("Delete error:", status, error, xhr.responseText);
+                console.error("Delete error:", xhr.responseText);
                 alert("Error deleting customer!");
             }
         });
@@ -203,18 +363,6 @@
     function goBack() {
         window.location.href = '../index.html';
     }
-
-    $(document).ready(function () {
-        $('#customerTableBody').on('click', 'tr', function () {
-            let row = $(this).find('td');
-            $('#customerId').val(row.eq(0).text());
-            $('#name').val(row.eq(1).text());
-            $('#address').val(row.eq(2).text());
-            $('#phone').val(row.eq(3).text());
-            $('#email').val(row.eq(4).text());
-            $('#date').val(row.eq(5).text());
-        });
-    });
 </script>
 
 </body>
