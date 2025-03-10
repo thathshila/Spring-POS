@@ -75,9 +75,9 @@
                         .then(response => response.json())
                         .then(roleData => {
                             if (roleData.role === "ADMIN") {
-                                window.location.href = "dashboard.html";
+                                 window.location.href = "dashboard.html";
                             } else if (roleData.role === "USER") {
-                                window.location.href = "view/dashboard.html";
+                                 window.location.href = "view/dashboard.html";
                             } else {
                                 alert("User role not recognized.");
                             }

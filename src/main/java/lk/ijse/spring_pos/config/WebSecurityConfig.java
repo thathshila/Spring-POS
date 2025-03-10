@@ -54,9 +54,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/auth/authenticate",
+                                //"/api/v1/customer/**",
                                 "/api/v1/user/register",
                                 "/api/v1/auth/refreshToken",
-                                "/api/v1/customer/getAll",
                                 "/api/v1/admin/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

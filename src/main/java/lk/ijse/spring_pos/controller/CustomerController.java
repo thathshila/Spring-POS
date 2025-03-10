@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("api/v1/customer")
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     @Autowired
@@ -32,6 +32,7 @@ public class CustomerController {
         return new ResponseUtil(200,"Customer Deleted",null);
     }
 
+   // @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("getAll")
     public ResponseUtil getAllCustomers() {
         return new ResponseUtil(
