@@ -77,9 +77,9 @@
                 success: function (data) {
                     alert("Registration Successful!");
 
-                    if (data.token) {
-                        localStorage.setItem("authToken", data.token);
-                    }
+                    // if (data.token) {
+                    //     localStorage.setItem("authToken", data.token);
+                    // }
 
                     if (userData.role === "ADMIN") {
                         window.location.href = "dashboard.html";

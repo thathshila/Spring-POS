@@ -63,9 +63,9 @@
             body: JSON.stringify(user)
         })
             .then(response => response.json())
-            .then(data => {
-                if (data.code === 201 && data.data.token) {
-                    localStorage.setItem("authToken", data.data.token);
+            .then(response => {
+                if (response.code === 201 && response.data.token) {
+                    localStorage.setItem("authToken", response.data.token);
 
                     // Fetch user role and redirect accordingly
                     fetch("http://localhost:8080/api/v1/admin/checkRole", {
