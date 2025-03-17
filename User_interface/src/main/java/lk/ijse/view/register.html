@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <form id="registerForm">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name:</label>
+                             <label for="name" class="form-label">Name:</label>
                             <input type="text" class="form-control" id="name" required>
                         </div>
 
@@ -77,9 +77,9 @@
                 success: function (data) {
                     alert("Registration Successful!");
 
-                    // if (data.token) {
-                    //     localStorage.setItem("authToken", data.token);
-                    // }
+                    if (data.token) {
+                        localStorage.setItem("authToken", data.token);
+                    }
 
                     if (userData.role === "ADMIN") {
                         window.location.href = "dashboard.html";
